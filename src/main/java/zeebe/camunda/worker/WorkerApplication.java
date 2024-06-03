@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -45,6 +48,28 @@ public class WorkerApplication {
 
         client.newCompleteCommand(job.getKey())
                 .variables("{\"reisedauer\": \"" + days * 24 + "\"}")
+                .send()
+                .exceptionally(throwable -> {
+                    throw new RuntimeException("Could not complete job " + job, throwable);
+                });
+    }
+
+    @JobWorker(type = "calculate-costs-total")
+    public void calculateCostsTotal(final ActivatedJob job, @Variable String reisedauer, @Variable int tagessatz, @Variable ArrayList<LinkedHashMap<String, Integer>> auflistung_kosten) {
+        //[{"beschreibung":"Bacon","kosten":1}]
+        logger.info("calculate costs total");
+
+        var kosten = new BigDecimal(0);
+
+        for (int i = 0; i < auflistung_kosten.size(); ++i) {
+            var kosten1 = auflistung_kosten.get(i).get("kosten");
+            kosten = new BigDecimal(kosten1).add(kosten);
+        }
+
+        kosten = new BigDecimal(tagessatz * Integer.parseInt(reisedauer)).add(kosten);
+
+        client.newCompleteCommand(job.getKey())
+                .variables("{\"gesamtkosten\": \"" + kosten + "\"}")
                 .send()
                 .exceptionally(throwable -> {
                     throw new RuntimeException("Could not complete job " + job, throwable);
