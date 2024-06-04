@@ -53,7 +53,6 @@ public class WorkerApplication {
 
     @JobWorker(type = "calculate-costs-total")
     public void calculateCostsTotal(final ActivatedJob job, @Variable String reisedauer, @Variable int tagessatz, @Variable ArrayList<LinkedHashMap<String, Integer>> auflistung_kosten) {
-        //[{"beschreibung":"Bacon","kosten":1}]
         logger.info("calculate costs total");
 
         var kosten = new BigDecimal(0);
@@ -82,14 +81,12 @@ public class WorkerApplication {
 
     @JobWorker(type = "archive-files")
     public void archiveFiles() {
-        //[{"beschreibung":"Bacon","kosten":1}]
         logger.info("generate pdf...");
         logger.info("...pdf successfully generated");
     }
 
     @JobWorker(type = "transfer-money")
     public void transferMoney() {
-        //[{"beschreibung":"Bacon","kosten":1}]
         logger.info("generate pdf...");
         logger.info("...pdf successfully generated");
     }
