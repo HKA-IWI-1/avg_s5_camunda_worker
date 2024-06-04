@@ -40,10 +40,7 @@ public class WorkerApplication {
         final var formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withLocale(Locale.GERMANY); // 2024-06-06T12:15+02:00
         final var localStartdatum = LocalDate.parse(startdatum, formatter);
         final var localEnddatum = LocalDate.parse(enddatum, formatter);
-        logger.info(localStartdatum.toString());
-        logger.info(localEnddatum.toString());
         int days = localStartdatum.until(localEnddatum).getDays();
-        logger.info("Tage: " + days);
         logger.info("Stunden: " + days * 24);
 
         client.newCompleteCommand(job.getKey())
@@ -74,5 +71,26 @@ public class WorkerApplication {
                 .exceptionally(throwable -> {
                     throw new RuntimeException("Could not complete job " + job, throwable);
                 });
+    }
+
+    @JobWorker(type = "generate-pdf")
+    public void generatePdf() {
+        //[{"beschreibung":"Bacon","kosten":1}]
+        logger.info("generate pdf...");
+        logger.info("...pdf successfully generated");
+    }
+
+    @JobWorker(type = "archive-files")
+    public void archiveFiles() {
+        //[{"beschreibung":"Bacon","kosten":1}]
+        logger.info("generate pdf...");
+        logger.info("...pdf successfully generated");
+    }
+
+    @JobWorker(type = "transfer-money")
+    public void transferMoney() {
+        //[{"beschreibung":"Bacon","kosten":1}]
+        logger.info("generate pdf...");
+        logger.info("...pdf successfully generated");
     }
 }
