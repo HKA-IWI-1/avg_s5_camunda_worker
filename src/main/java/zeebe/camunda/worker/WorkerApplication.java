@@ -81,13 +81,19 @@ public class WorkerApplication {
 
     @JobWorker(type = "archive-files")
     public void archiveFiles() {
-        logger.info("generate pdf...");
-        logger.info("...pdf successfully generated");
+        logger.info("archive files...");
+        logger.info("...files successfully archived");
     }
 
     @JobWorker(type = "transfer-money")
     public void transferMoney() {
-        logger.info("generate pdf...");
-        logger.info("...pdf successfully generated");
+        logger.info("transfer money...");
+        logger.info("...money successfully transferred");
+    }
+
+    @JobWorker(type = "send-mail")
+    public void sendMail() {
+        logger.info("send mail...");
+        logger.info("...mail successfully sent");
     }
 }
